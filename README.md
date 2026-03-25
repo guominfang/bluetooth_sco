@@ -15,7 +15,7 @@ Add this to your package's `pubspec.yaml` file:
 ```yaml
 dependencies:
   bluetooth_sco:
-    path: ../bluetooth_sco
+    git: "https://github.com/guominfang/bluetooth_sco"
 ```
 
 Then run:
