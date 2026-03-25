@@ -1,0 +1,11 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="com.kwok.bluetooth_sco">
+
+    <!-- Bluetooth SCO: required to record from Bluetooth headset microphone -->
+    <!-- BLUETOOTH is a normal permission on API <= 30 (auto-granted) -->
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <!-- BLUETOOTH_CONNECT is required on API 31+ to interact with paired devices -->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <!-- Required to change AudioManager mode for SCO on API < 31 -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+</manifest>
