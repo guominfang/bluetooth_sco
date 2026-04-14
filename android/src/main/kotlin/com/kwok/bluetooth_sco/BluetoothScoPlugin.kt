@@ -1,6 +1,8 @@
 package com.kwok.bluetooth_sco
 
+import android.bluetooth.BluetoothAdapter
 import android.content.Context
+import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import android.os.Build
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -47,15 +49,15 @@ class BluetoothScoPlugin :
     private fun isBluetoothScoAvailable(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             // API 31+: query communication device list (no BT permission required)
-            audioManager.availableCommunicationDevices.any { device ->
-                device.type == AudioDeviceInfo.TYPE_BLUETOOTH_SCO
-            }
+            audioManager?.availableCommunicationDevices?.any { device ->
+                device?.type == AudioDeviceInfo.TYPE_BLUETOOTH_SCO
+            } == true
         } else {
             @Suppress("DEPRECATION")
             val adapter = BluetoothAdapter.getDefaultAdapter()
             adapter != null &&
                     adapter.isEnabled &&
-                    audioManager.isBluetoothScoAvailableOffCall
+                    audioManager?.isBluetoothScoAvailableOffCall == true
         }
     }
 
@@ -67,22 +69,22 @@ class BluetoothScoPlugin :
     private fun startBluetoothSco(result: MethodChannel.Result) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                val btDevice = audioManager.availableCommunicationDevices.firstOrNull {
+                val btDevice = audioManager?.availableCommunicationDevices?.firstOrNull {
                     it.type == AudioDeviceInfo.TYPE_BLUETOOTH_SCO
                 }
                 if (btDevice != null) {
-                    val success = audioManager.setCommunicationDevice(btDevice)
+                    val success = audioManager?.setCommunicationDevice(btDevice) == true
                     result.success(success)
                 } else {
                     result.success(false)
                 }
             } else {
                 @Suppress("DEPRECATION")
-                audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
+                audioManager?.mode = AudioManager.MODE_IN_COMMUNICATION
                 @Suppress("DEPRECATION")
-                audioManager.startBluetoothSco()
+                audioManager?.startBluetoothSco()
                 @Suppress("DEPRECATION")
-                audioManager.isBluetoothScoOn = true
+                audioManager?.isBluetoothScoOn = true
                 result.success(true)
             }
         } catch (e: Exception) {
@@ -96,14 +98,14 @@ class BluetoothScoPlugin :
     private fun stopBluetoothSco(result: MethodChannel.Result) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                audioManager.clearCommunicationDevice()
+                audioManager?.clearCommunicationDevice()
             } else {
                 @Suppress("DEPRECATION")
-                audioManager.stopBluetoothSco()
+                audioManager?.stopBluetoothSco()
                 @Suppress("DEPRECATION")
-                audioManager.isBluetoothScoOn = false
+                audioManager?.isBluetoothScoOn = false
                 @Suppress("DEPRECATION")
-                audioManager.mode = AudioManager.MODE_NORMAL
+                audioManager?.mode = AudioManager.MODE_NORMAL
             }
             result.success(true)
         } catch (e: Exception) {
@@ -117,14 +119,14 @@ class BluetoothScoPlugin :
         // Clean up SCO if still active
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                audioManager.clearCommunicationDevice()
+                audioManager?.clearCommunicationDevice()
             } else {
                 @Suppress("DEPRECATION")
-                audioManager.stopBluetoothSco()
+                audioManager?.stopBluetoothSco()
                 @Suppress("DEPRECATION")
-                audioManager.isBluetoothScoOn = false
+                audioManager?.isBluetoothScoOn = false
                 @Suppress("DEPRECATION")
-                audioManager.mode = AudioManager.MODE_NORMAL
+                audioManager?.mode = AudioManager.MODE_NORMAL
             }
         } catch (_: Exception) {}
         channel.setMethodCallHandler(null)
