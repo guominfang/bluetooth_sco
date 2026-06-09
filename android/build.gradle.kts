@@ -23,7 +23,7 @@ allprojects {
 
 plugins {
     id("com.android.library")
-    id("kotlin-android")
+//    id("kotlin-android")
 }
 
 android {
@@ -36,9 +36,9 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
+//    kotlinOptions {
+//        jvmTarget = JavaVersion.VERSION_17.toString()
+//    }
 
     sourceSets {
         getByName("main") {
@@ -69,6 +69,14 @@ android {
         }
     }
 }
+
+
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
+}
+
 
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
